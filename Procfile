@@ -1,0 +1,1 @@
+worker: python telegram1.py

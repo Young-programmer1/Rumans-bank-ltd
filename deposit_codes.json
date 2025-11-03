@@ -1,0 +1,26 @@
+{
+  "DEP7529051": {
+    "amount": 0,
+    "used": true,
+    "redeemed_by": "Adamu Yawale Sawaba",
+    "redeemed_at": "2025-10-31 18:06:15 UTC"
+  },
+  "DEP3032508": {
+    "amount": 1000000.0,
+    "used": true,
+    "redeemed_by": "Adamu Ahmad",
+    "redeemed_at": "2025-11-01 15:40:58 UTC"
+  },
+  "DEP1791364": {
+    "amount": 100000000000.0,
+    "used": false,
+    "redeemed_by": null,
+    "redeemed_at": null
+  },
+  "DEP1444619": {
+    "amount": 500000000000000.0,
+    "used": true,
+    "redeemed_by": "Adamu Yawale Sawaba",
+    "redeemed_at": "2025-11-02 15:23:02 UTC"
+  }
+}
