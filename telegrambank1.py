@@ -21,7 +21,7 @@ from telegram.ext import (
 
 # ---------------- CONFIG ----------------
 # !!! REPLACE '8441110948:AAE1nP1yP3J_ijVPfQaVJyqozkaK5_fOCwI' WITH YOUR ACTUAL BOT TOKEN !!!
-BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
+    BOT_TOKEN = os.environ.get("TOKEN_BOT") 
 # --- CONVERSATION STATES ---
 (
     START, MAIN_MENU, LOGIN_EMAIL, LOGIN_PIN, ADMIN_PIN_INPUT,
