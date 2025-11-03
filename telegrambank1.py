@@ -974,6 +974,7 @@ def user_deposit_with_code(account, code):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Sends the initial main menu using ReplyKeyboardMarkup."""
+    
     # Use ReplyKeyboardMarkup for persistent buttons at the bottom
     keyboard = [
         ["Login to Account", "Create New Account (Sign Up)"],
@@ -984,13 +985,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     text = "Welcome to Romans Bank Ltd – The Future of Banking.\n\nPlease choose an option from the keyboard below:"
 
-    if update.callback_query:
-        await update.callback_query.answer()
-        await update.callback_query.edit_message_text(text, reply_markup=reply_markup)
-    else:
+    # CRITICAL FIX: Only check for update.message, which is guaranteed when using CommandHandler.
+    if update.message:
         await update.message.reply_text(text, reply_markup=reply_markup)
-
-    context.user_data.clear()  # Clear state when restarting
+    
+    context.user_data.clear() # Clear state when restarting
     return START
 
 
