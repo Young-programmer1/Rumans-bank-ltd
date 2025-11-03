@@ -37,7 +37,7 @@ from telegram.ext import (
 DATA_FILE = "romans_banks_data.json"
 SENDER_EMAIL = "rumansbankltd@gmail.com"          # Replace with your Gmail
 # Replace with Gmail App Password
-APP_PASSWORD = os.environ.get("GMAIL_APP_PASSWORD")
+APP_PASSWORD = os.environ.get("APP_PASSWORD")
 SENDER_NAME = "ROMANS BANK LTD"
 
 # ---------------- UTILITY ----------------
