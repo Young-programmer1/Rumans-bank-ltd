@@ -10,7 +10,8 @@ from email.mime.text import MIMEText
 import getpass
 from datetime import datetime, timedelta
 import random
-
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
 # --- TELEGRAM BOT IMPORTS ---
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove, ReplyKeyboardMarkup
 from telegram.ext import (
@@ -1804,22 +1805,60 @@ async def topup_data_phone(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return ConversationHandler.END
 
 
+# (Assuming your existing imports like os, Application, etc., are here)
+import os 
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import threading
+
+# ... (ALL YOUR EXISTING CONSTANTS, HANDLER FUNCTIONS, AND HELPER FUNCTIONS GO HERE) ...
+
+# -------------------------------------------------------------
+# --- NEW CODE ADDED FOR RENDER FREE WEB SERVICE WORKAROUND ---
+# -------------------------------------------------------------
+
+# This server is just a dummy to satisfy Render's Web Service requirements.
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    """A minimal HTTP handler for health checks."""
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b'Bot is running.')
+
+def start_http_server():
+    """Starts a simple server on the port Render requires (PORT environment variable)."""
+    # Render sets the PORT environment variable for Web Services
+    # We use 8080 as a local fallback, but Render always uses its own port.
+    PORT = int(os.environ.get("PORT", 8080)) 
+    server_address = ('', PORT)
+    httpd = HTTPServer(server_address, HealthCheckHandler)
+    print(f"Starting dummy HTTP server on port {PORT}...")
+    # This call blocks the main thread, keeping the Render service alive.
+    httpd.serve_forever()
+
+# -------------------------------------------------------------
+# --- REPLACED MAIN FUNCTION ---
+# -------------------------------------------------------------
+
 def main():
     """Entry point and main loop for the Telegram application."""
+    
+    # NOTE: BOT_TOKEN must be loaded from os.environ previously or here. 
+    # Assuming it's defined via os.environ.get('TELEGRAM_BOT_TOKEN') at the top.
     if BOT_TOKEN in ("", None, "YOUR_TELEGRAM_BOT_TOKEN_HERE"):
         print("ERROR: Please set BOT_TOKEN to your actual Telegram bot token.")
         return
+
+    # 1. Initialize Threading and Application
     start_autosave_thread()
     application = Application.builder().token(BOT_TOKEN).build()
-    print("🤖 Romans Bank Bot is running...")
-
+    
     # Define Reply Keyboard options that trigger actions in the START state
     start_options = filters.Text(
         ["Login to Account", "Create New Account (Sign Up)", "Admin Login"])
 
     # Define Reply Keyboard options that trigger actions in the USER_MENU state
     user_menu_options = filters.Text(["Transfer Funds", "Buy Airtime / Data", "Deposit via Code", "View Transaction History",
-                                     "Logout", "Generate Deposit Code", "View All User Accounts", "View All Deposit Codes"])
+                                    "Logout", "Generate Deposit Code", "View All User Accounts", "View All Deposit Codes"])
 
     # Main Conversation Handler
     conv_handler = ConversationHandler(
@@ -1872,13 +1911,13 @@ def main():
             # Top-up flow (back to main menu via inline button needs a specific pattern and to handle state transition back to USER_MENU)
             TOPUP_MENU: [
                 CallbackQueryHandler(topup_network_select,
-                                     pattern="^buy_(airtime|data)$"),
+                                        pattern="^buy_(airtime|data)$"),
                 # This callback is used to return from a nested INLINE menu to the main REPLY menu
                 CallbackQueryHandler(
                     user_menu_display, pattern="^back_to_main_menu_inline$"),
                 # From network select back to top-up menu
                 CallbackQueryHandler(topup_menu_display,
-                                     pattern="^user_topup_inline$"),
+                                        pattern="^user_topup_inline$"),
             ],
             TOPUP_NETWORK: [CallbackQueryHandler(topup_network_chosen, pattern="^net_")],
             # Airtime Specific
@@ -1890,7 +1929,7 @@ def main():
                     topup_data_bundle_chosen, pattern="^bundle_"),
                 # Back button from insufficient balance
                 CallbackQueryHandler(topup_network_select,
-                                     pattern="^buy_data$"),
+                                        pattern="^buy_data$"),
             ],
             TOPUP_DATA_PHONE: [MessageHandler(filters.TEXT & ~filters.COMMAND, topup_data_phone)],
         },
@@ -1900,8 +1939,20 @@ def main():
     )
 
     application.add_handler(conv_handler)
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    
+    # 2. Start Telegram Polling in a background thread
+    bot_thread = threading.Thread(
+        target=lambda: application.run_polling(allowed_updates=Update.ALL_TYPES), 
+        daemon=True # Daemon thread allows the main process to exit if the main thread (HTTP server) stops
+    )
+    bot_thread.start()
+    
+    print("🤖 Romans Bank Bot is running in a thread...")
+
+    # 3. Start the dummy HTTP server in the main thread (this is the process Render monitors)
+    start_http_server()
 
 
 if __name__ == "__main__":
     main()
+
