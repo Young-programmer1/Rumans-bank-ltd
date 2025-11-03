@@ -1,0 +1,71 @@
+{
+  "accounts": {
+    "sasforextrader@gmail.com": {
+      "first_name": "Adamu",
+      "last_name": "Ahmad",
+      "age": 23,
+      "name": "Adamu Ahmad",
+      "email": "sasforextrader@gmail.com",
+      "pin": "2323",
+      "account_number": "2325260401",
+      "bank": "Romans Bank Ltd",
+      "balance": 0.0,
+      "transactions": [],
+      "beneficiaries": {}
+    },
+    "adamusawaba30@gmail.com": {
+      "first_name": "Adamu",
+      "last_name": "Yawale Sawaba",
+      "age": 32,
+      "name": "Adamu Yawale Sawaba",
+      "email": "adamusawaba30@gmail.com",
+      "pin": "4321",
+      "account_number": "2315108066",
+      "bank": "Romans Bank Ltd",
+      "balance": 499999998990000.0,
+      "transactions": [
+        {
+          "ref": "TXN0211251523025840",
+          "type": "deposit_code_in",
+          "amount": 500000000000000.0,
+          "timestamp": "2025-11-02 15:23:02 UTC",
+          "balance_after": 500000000000000.0,
+          "metadata": {
+            "code": "DEP1444619",
+            "admin_note": "Deposit via admin-generated code"
+          }
+        },
+        {
+          "ref": "TXN0211251526066809",
+          "type": "transfer_out_external",
+          "amount": 1000000.0,
+          "timestamp": "2025-11-02 15:26:06 UTC",
+          "balance_after": 499999998990000.0,
+          "metadata": {
+            "to_bank": "Zenith Bank",
+            "to_account": "2250030385",
+            "to_name": "Adamu Yawale Muhammad",
+            "fee": 10000.0,
+            "narration": "Business"
+          }
+        }
+      ],
+      "beneficiaries": {}
+    }
+  },
+  "by_account_number": {
+    "2325260401": "sasforextrader@gmail.com",
+    "2315108066": "adamusawaba30@gmail.com"
+  },
+  "otps": {
+    "OTP0211251525396209": {
+      "otp": "461026",
+      "email": "adamusawaba30@gmail.com",
+      "action": "External Transfer",
+      "amount": 1010000.0,
+      "used": true,
+      "created_at": "2025-11-02 15:25:39 UTC",
+      "expires_at": "2025-11-02 15:30:39 UTC"
+    }
+  }
+}
