@@ -23,6 +23,8 @@ from telegram.ext import (
 # !!! REPLACE '8441110948:AAE1nP1yP3J_ijVPfQaVJyqozkaK5_fOCwI' WITH YOUR ACTUAL BOT TOKEN !!!
 BOT_TOKEN = os.environ.get("TOKEN_BOT") 
 # --- CONVERSATION STATES ---
+# --- CORRECTED CONVERSATION STATES DEFINITION ---
+# The total number of states is now 32 (0 to 31).
 (
     START, MAIN_MENU, LOGIN_EMAIL, LOGIN_PIN, ADMIN_PIN_INPUT,
     USER_MENU, TRANSFER_MENU, TRANSFER_INTERNAL_ACCT, TRANSFER_INTERNAL_AMT,
@@ -31,8 +33,13 @@ BOT_TOKEN = os.environ.get("TOKEN_BOT")
     OTP_ENTRY, TOPUP_MENU, TOPUP_NETWORK, TOPUP_AIRTIME_PHONE, TOPUP_AIRTIME_AMT,
     TOPUP_DATA_PHONE, TOPUP_DATA_BUNDLE, DEPOSIT_CODE_INPUT,
     REGISTER_FIRST_NAME, REGISTER_LAST_NAME, REGISTER_AGE, REGISTER_EMAIL, REGISTER_PIN,
-    ADMIN_GEN_CODE_INPUT
-) = range(29)
+    ADMIN_GEN_CODE_INPUT, # Total 29 states up to here (0-28)
+    
+    # --- ADDED PIN RECOVERY STATES ---
+    FORGOT_PIN_EMAIL, # State 29
+    FORGOT_PIN_OTP,   # State 30
+    FORGOT_PIN_NEW_PIN # State 31
+) = range(32) # The range must be equal to the total number of items
 
 DATA_FILE = "romans_banks_data.json"
 SENDER_EMAIL = "rumansbankltd@gmail.com"          # Replace with your Gmail
